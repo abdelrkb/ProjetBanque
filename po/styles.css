@@ -23,15 +23,12 @@ body {
     display: block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
     text-decoration: none;
-    transition: background-color 0.3s, color 0.3s; /* Ajout de transitions pour une animation fluide */
+    padding: 15px 20px; /* Ajustez la marge intérieure selon vos besoins */
 }
 
 .menu a:hover {
-    background-color: #ddd;
-    color: black;
-    padding: 18px 16px; /* Ajustez la taille du hover selon vos besoins */
+    background-color: #555; /* Couleur d'arrière-plan au survol */
 }
 
 .menu-logo {
@@ -55,6 +52,7 @@ body {
 .menu a:visited {
     color: white; /* Couleur pour les liens visités */
 }
+
 
 
 .box {
