@@ -6,6 +6,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 <script src="script.js"></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
+<script src='https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js'></script>
 
 <?php
 session_start();
@@ -152,7 +154,7 @@ if (isset($_POST['search1'])) {
     echo "<h1> Détail de trésorerie </h1>";
     $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date'");  
     echo "
-    <table id='example' class='table table-striped' style='width:100%'>
+    <table id='example' class='table table-striped ex' style='width:100%'>
     <thead>
         <th> N° de Siren </th>
         <th> Raison Sociale </th>
@@ -183,24 +185,25 @@ if (isset($_POST['search1'])) {
            <td> $date </td>
            </tr>";
         }
-        
+
     
     //EXPORT
     echo"</tbody></table>
 
-    <script src='https//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'></script>
-      <script src='https//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js'></script>
-    <button id ='exp'> Exporter vers excel </button>
-    <script type='text/javascript'>
-    $(#'exp').click(function(
-        $('#example').table2excel({
-    name: 'Détails des transactions du $date',
-    filename: 'DetailTransac.xls', // do include extension
-    preserveColors: false // set to true if you want background colors and font colors preserved
-});
-        
-    ));
+
+<button id='exp'>Exporter vers Excel</button>
+<button id='csv'>Exporter vers CSV </button>
+<script type='text/javascript'>
+    $('#exp').click(function() {
+        $('.ex').table2excel({
+            name: 'Détails des transactions du <?php echo $date; ?>',
+            filename: 'DetailTransac.xls', // do include extension
+            preserveColors: false // set to true if you want background colors and font colors preserved
+        });
+    });
 </script>
+
+
 ";
 
 }
@@ -238,7 +241,7 @@ if (isset ($_POST['search2'])){
     $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date' AND c.SIREN = '$siren'");
 
     echo" </tr> </tbody></table>
-    <table id='example' class='table table-striped' style='width:100%'>
+    <table id='example' class='table table-striped ex' style='width:100%'>
     <thead>
          <th> N° de Siren </th>
         <th> Raison Sociale </th>
@@ -268,10 +271,23 @@ if (isset ($_POST['search2'])){
     }
 
 
-    echo "</tbody> </table>";
+    echo "</tbody> </table>
+<button id='exp'>Exporter vers Excel</button>
+<script type='text/javascript'>
+    $('#exp').click(function() {
+        $('.ex').table2excel({
+            name: 'Détails des transactions du <?php echo $date; ?>',
+            filename: 'DetailTransac.xls', // do include extension
+            preserveColors: false // set to true if you want background colors and font colors preserved
+        });
+    });
+</script>
+";
 
 }
 
+
+//RECHERCHE PAR RAISON SOCIALE
 if (isset ($_POST['search3'])){
     $raison = $_POST['raison'];
     $date= $_POST['date'];
@@ -309,7 +325,7 @@ GROUP BY c.SIREN, c.Raison_sociale;
 
     echo" 
     <h1> Détails des transactions </h1>
-    <table id='example' class='table table-striped' style='width:100%'>
+    <table id='example' class='table table-striped ex' style='width:100%'>
     <thead>
          <th> N° de Siren </th>
         <th> Raison Sociale </th>
@@ -339,7 +355,20 @@ GROUP BY c.SIREN, c.Raison_sociale;
     }
 
 
-    echo "</tbody> </table>";
+    echo
+    "</tbody> </table>
+
+<button id='exp'>Exporter vers Excel</button>
+<script type='text/javascript'>
+    $('#exp').click(function() {
+        $('.ex').table2excel({
+            name: 'Détails des transactions du <?php echo $date; ?>',
+            filename: 'DetailTransac.xls', // do include extension
+            preserveColors: false // set to true if you want background colors and font colors preserved
+        });
+    });
+</script>
+";
 
 }
 
