@@ -25,9 +25,49 @@ body {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+    transition: background-color 0.3s, color 0.3s; /* Ajout de transitions pour une animation fluide */
 }
 
 .menu a:hover {
     background-color: #ddd;
     color: black;
+    padding: 18px 16px; /* Ajustez la taille du hover selon vos besoins */
+}
+
+.menu-logo {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.menu-list li {
+    margin-right: 10px;
+}
+
+.menu-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; /* Centre les éléments verticalement */
+}
+
+.menu a:visited {
+    color: white; /* Couleur pour les liens visités */
+}
+
+
+.box {
+    border: 1px solid #ccc; /* Bordure grise */
+    padding: 20px; /* Espacement intérieur de la boîte */
+    border-radius: 8px; /* Coins arrondis */
+    width: 300px; /* Largeur de la boîte */
+    margin: 20px auto; /* Centrage horizontal avec une marge autour de la boîte */
+    background-color: #f9f9f9; /* Couleur de fond */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+.box h1 {
+    text-align: center; /* Centre le titre à l'intérieur de la boîte */
+
 }
