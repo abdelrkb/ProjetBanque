@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
 <script defer src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -11,7 +12,9 @@
 <script defer src="TableCSVExporter.js"> </script>
 <script src="bower_components\jquery\dist\jquery.min.js"></script>
 <script src="bower_components\jquery-table2excel\dist\jquery.table2excel.min.js"></script>
-
+<script src="table2excel.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
 <?php
 session_start();
 
@@ -159,13 +162,15 @@ if (isset($_POST['search1'])) {
     echo "
     <table id='example' class='table table-striped' style='width:100%'>
     <thead>
+    <tr>
         <th> N° de Siren </th>
         <th> Raison Sociale </th>
         <th> Montant (EUR) </th>
         <th> Statut </th>
         <th> Date transaction</th>
+        </tr>
     </thead>
-    <tbody>";
+    <tbody> <div id='content'>";
     
         
         while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
@@ -191,20 +196,16 @@ if (isset($_POST['search1'])) {
 
     
     //EXPORT
-    echo"</tbody></table>
+    echo"</tbody></table></div>
 
+<div class = 'export'>
 <button id='downloadexcel'> Export vers excel</button>
-
 <script>
-document.getElementById(downloadexcel).addEventListener('click', function() {
+document.getElementById('downloadexcel').addEventListener('click', function() {
       var table2excel = new Table2Excel();
-  table2excel.export(document.querySelectorAll('example'));
+  table2excel.export(document.querySelectorAll('#example'));
 })
 </script>
-
-";
-
- /*
 
 <button id='btnExportToCsv'>Exporter vers CSV </button>
     <script>
@@ -228,22 +229,28 @@ document.getElementById(downloadexcel).addEventListener('click', function() {
         });
     </script>
 
-<button id='dl-pdf'> Exporter vers PDF </button>
-<script scr='html2pdf.bundle.min.js'> </script>
-<script type='text/javascript'>
-    document.getElementById('dl-pdf').onclick = function() {
-        var element = document.getElementById('example');
+<button id='pdf' onclick='exportPdf()'> Exporter vers pdf</button>
 
-        var opt = {
-            margin : 1,
-            filename : 'DetailTransac.pdf',
-            image: {type : 'jpeg', quality : 0.98},
-            html2canvas {scale : 2},
-            jsPDF : (unit : 'in', format : 'letter', orientation 'portrait')
-        }
-        html2pdf(element,opt);
-    };
+<script>
+document.getElementById('pdf').addEventListener('click', function() {
+  // Create a new jsPDF instance
+  var doc = new jsPDF();
+
+  // Add content from the table to the PDF
+  doc.autoTable({ html: '#example' });
+
+  // Save the PDF with a specified name
+  doc.save('table_to_pdf.pdf');
+});
 </script>
+</div>
+";
+
+ /*
+
+
+
+
 *
          * */
 
@@ -313,16 +320,52 @@ if (isset ($_POST['search2'])){
 
 
     echo "</tbody> </table>
-<button id='exp'>Exporter vers Excel</button>
-<script type='text/javascript'>
-    $('#exp').click(function() {
-        $('.ex').table2excel({
-            name: 'Détails des transactions du <?php echo $date; ?>',
-            filename: 'DetailTransac.xls', // do include extension
-            preserveColors: false // set to true if you want background colors and font colors preserved
-        });
-    });
+<div class = 'export'>
+<button id='downloadexcel'> Export vers excel</button>
+<script>
+document.getElementById('downloadexcel').addEventListener('click', function() {
+      var table2excel = new Table2Excel();
+  table2excel.export(document.querySelectorAll('#example'));
+})
 </script>
+
+<button id='btnExportToCsv'>Exporter vers CSV </button>
+    <script>
+        const dataTable = document.getElementById('example');
+        const btnExportToCsv = document.getElementById('btnExportToCsv');
+
+        btnExportToCsv.addEventListener('click', () => {
+            const exporter = new TableCSVExporter(dataTable);
+            const csvOutput = exporter.convertToCSV();
+            const csvBlob = new Blob([csvOutput], { type: 'text/csv' });
+            const blobUrl = URL.createObjectURL(csvBlob);
+            const anchorElement = document.createElement('a');
+
+            anchorElement.href = blobUrl;
+            anchorElement.download = 'DétailTransac.csv';
+            anchorElement.click();
+
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+            }, 500);
+        });
+    </script>
+
+<button id='pdf' onclick='exportPdf()'> Exporter vers pdf</button>
+
+<script>
+document.getElementById('pdf').addEventListener('click', function() {
+  // Create a new jsPDF instance
+  var doc = new jsPDF();
+
+  // Add content from the table to the PDF
+  doc.autoTable({ html: '#example' });
+
+  // Save the PDF with a specified name
+  doc.save('table_to_pdf.pdf');
+});
+</script>
+</div>
 ";
 
 }
@@ -399,16 +442,52 @@ GROUP BY c.SIREN, c.Raison_sociale;
     echo
     "</tbody> </table>
 
-<button id='exp'>Exporter vers Excel</button>
-<script type='text/javascript'>
-    $('#exp').click(function() {
-        $('.ex').table2excel({
-            name: 'Détails des transactions du <?php echo $date; ?>',
-            filename: 'DetailTransac.xls', // do include extension
-            preserveColors: false // set to true if you want background colors and font colors preserved
-        });
-    });
+<div class = 'export'>
+<button id='downloadexcel'> Export vers excel</button>
+<script>
+document.getElementById('downloadexcel').addEventListener('click', function() {
+      var table2excel = new Table2Excel();
+  table2excel.export(document.querySelectorAll('#example'));
+})
 </script>
+
+<button id='btnExportToCsv'>Exporter vers CSV </button>
+    <script>
+        const dataTable = document.getElementById('example');
+        const btnExportToCsv = document.getElementById('btnExportToCsv');
+
+        btnExportToCsv.addEventListener('click', () => {
+            const exporter = new TableCSVExporter(dataTable);
+            const csvOutput = exporter.convertToCSV();
+            const csvBlob = new Blob([csvOutput], { type: 'text/csv' });
+            const blobUrl = URL.createObjectURL(csvBlob);
+            const anchorElement = document.createElement('a');
+
+            anchorElement.href = blobUrl;
+            anchorElement.download = 'DétailTransac.csv';
+            anchorElement.click();
+
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl);
+            }, 500);
+        });
+    </script>
+
+<button id='pdf' onclick='exportPdf()'> Exporter vers pdf</button>
+
+<script>
+document.getElementById('pdf').addEventListener('click', function() {
+  // Create a new jsPDF instance
+  var doc = new jsPDF();
+
+  // Add content from the table to the PDF
+  doc.autoTable({ html: '#example' });
+
+  // Save the PDF with a specified name
+  doc.save('table_to_pdf.pdf');
+});
+</script>
+</div>
 ";
 
 }
