@@ -9,7 +9,9 @@
 $menuItems = array(
     'Tresorerie' => 'tresorerie_po.php',
     'Remise' => 'remise_po.php',
-    'Impaye' => 'impaye_po.php'
+    'Impaye' => 'impaye_po.php',
+    'Deconnexion' => 'compte.php'
+
 );
 
 foreach ($menuItems as $label => $link) {

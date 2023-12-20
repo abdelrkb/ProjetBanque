@@ -61,7 +61,7 @@ echo "
             <input type='submit' value='Valider' name='search1'>
         </form>
     </center>
-</div>";       
+</div>";
 // -------------------
 // 2.Recherche par Siren et date de transaction
 // -------------------
@@ -145,7 +145,7 @@ if (isset($_POST['search1'])) {
         <th> Devise (EUR)</th>
         <th> Montant total</th>
     </thead> <tbody> <tr>";
-    
+
     while ($ligne = $results1->fetch(PDO::FETCH_OBJ)) {
      echo"<td> / </td>
      <td> / </td>
@@ -158,7 +158,7 @@ if (isset($_POST['search1'])) {
 
 
     echo "<h1> Détail de trésorerie </h1>";
-    $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date'");  
+    $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date'");
     echo "
     <table id='example' class='table table-striped' style='width:100%'>
     <thead>
@@ -171,8 +171,8 @@ if (isset($_POST['search1'])) {
         </tr>
     </thead>
     <tbody> <div id='content'>";
-    
-        
+
+
         while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
             echo "<tr>";
            $siren = $ligne->SIREN;
@@ -194,12 +194,13 @@ if (isset($_POST['search1'])) {
            </tr>";
         }
 
-    
+
     //EXPORT
     echo"</tbody></table></div>
 
 <div class = 'export'>
-<button id='downloadexcel'> Export vers excel</button>
+<h3>Exporter le tableau des transactions</h3>
+<button id='downloadexcel'> Export vers un fichier excel </button>
 <script>
 document.getElementById('downloadexcel').addEventListener('click', function() {
       var table2excel = new Table2Excel();
@@ -275,7 +276,7 @@ if (isset ($_POST['search2'])){
         <th> Devise (EUR)</th>
         <th> Montant total</th>
     </thead> <tbody> <tr>";
-    
+
     while ($ligne = $results1->fetch(PDO::FETCH_OBJ)) {
         $raison = $ligne->Raison_sociale;
      echo"<td> $siren </td>
