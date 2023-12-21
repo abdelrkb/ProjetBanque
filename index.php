@@ -17,7 +17,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['mdp'])){
 <div class="container">
     <h2 class="pc">Se connecter</h2>
 
-    <form action="" method="post">
+    <form action="client/tresorerie_client.php" method="post">
     <ul>
         <li>
             <label for="login">Login: </label>

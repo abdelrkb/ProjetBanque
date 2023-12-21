@@ -36,6 +36,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['mdp'])){
                 <button type="submit">Se connecter</button>
             </div>
         </ul>
+        <a href="index.php"> Retour </a>
     </form>
 
 </div>
