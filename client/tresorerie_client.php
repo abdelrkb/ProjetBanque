@@ -40,7 +40,7 @@ $siren = $_COOKIE['siren_cookie'];
 $results1 = $dbh -> query("SELECT SOLDE from banque_clients WHERE SIREN='$siren';");
 while ($ligne = $results1->fetch(PDO::FETCH_OBJ)){
     echo "<h1> Solde Global</h1>";
-    echo "<center> $ligne->SOLDE </center>";
+    echo "<center> $ligne->SOLDE €</center>";
 }
 
 echo"
@@ -73,17 +73,16 @@ if (isset($_POST['search1'])) {
         <th> N° Siren</th>
         <th> Raison Sociale</th>
         <th> Nombres Transactions</th>
-        <th> Devise (EUR)</th>
         <th> Montant total</th>
     </thead> <tbody> <tr>";
 
     while ($ligne = $results1->fetch(PDO::FETCH_OBJ)) {
         $raison = $ligne->Raison_sociale;
-     echo"<td> $siren </td>
+        $color = ($ligne->montantTotal < 0) ? 'red' : 'green';
+        echo"<td> $siren </td>
      <td> $ligne->Raison_sociale </td>
      <td> $ligne->nb </td>
-     <td> '€' </td>
-     <td> $ligne->montantTotal </td>
+     <td style='color:$color'> $ligne->montantTotal </td>
     ";
     }
 
@@ -104,20 +103,22 @@ echo" </tr> </tbody></table>
 while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
     if ($ligne->Statut == 1) {
         $statut = 'payé';
+        $color = "green";
     }
     else{
         $statut = 'impayé';
+        $color = "red";
     }
     echo"
         <tr>
         <td> $siren </td>
         <td> $ligne->Raison_sociale</td>
-        <td> $ligne->Montant</td>
-        <td> $statut</td>
+        <td style='color:$color;'> $ligne->Montant</td>
+        <td style='color:$color;'> $statut</td>
         <td> $date </td>
         </tr>
      ";
-
+}
     echo "</tbody> </table>
 <div class = 'export'>
 <button id='downloadexcel'> Export vers excel</button>
@@ -169,5 +170,5 @@ document.getElementById('pdf').addEventListener('click', function() {
 
 ";
 
-}}
+}
 ?>

@@ -49,10 +49,10 @@ if (isset($_POST['submit'])) {
     } else {
         // Utilisation de la variable $dbh pour exécuter la requête SQL
         $results = $dbh->query("
-            SELECT DATE_VENTE, SUM(MONTANT) AS MontantTotal
+            SELECT DATE_VENTE, SUM(MONTANT) AS MontantTotal, LibelleImp
             FROM banque_transaction 
             WHERE STATUT = 0 AND DATE_VENTE > '$dated' AND DATE_VENTE < '$datef' AND SIREN = '$siren'
-            GROUP BY DATE_VENTE
+            GROUP BY DATE_VENTE, LibelleImp
         ");
         echo "
 
@@ -71,11 +71,15 @@ if (isset($_POST['submit'])) {
         // Récupérer les données depuis PHP
         var dates = [];
         var montants = [];
+        var libelle = [];
 
-        <?php
+
+    <?php
         while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
             echo "dates.push('{$ligne->DATE_VENTE}');";
             echo "montants.push('{$ligne->MontantTotal}');";
+            echo "libelle.push('{$ligne->LibelleImp}');";
+
         }
         ?>
 
@@ -102,12 +106,12 @@ if (isset($_POST['submit'])) {
             }
         });
 
-        // Créer le graphique en camembert avec Chart.js
+// Créer le graphique en camembert avec Chart.js
         var pieCtx = document.getElementById('myPieChart').getContext('2d');
         var myPieChart = new Chart(pieCtx, {
             type: 'pie',
             data: {
-                labels: dates,
+                labels: libelle,  // Utilisez les libellés au lieu des dates
                 datasets: [{
                     data: montants,
                     backgroundColor: [
@@ -130,6 +134,7 @@ if (isset($_POST['submit'])) {
                 }]
             }
         });
+
 
         $('#exportPNG').click(function () {
             html2canvas(document.getElementById('myChart')).then(function (canvas) {

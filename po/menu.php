@@ -11,7 +11,9 @@ $menuItems = array(
     'Remise' => 'remise_po.php',
     'Impaye' => 'impaye_po.php',
     'Graphique' => 'graphique_po.php',
-    'Deconnexion' => 'compte.php'
+    'Suppression' => 'Suppression_po.php',
+        'Deconnexion' => 'compte.php'
+
 );
 
 foreach ($menuItems as $label => $link) {

@@ -12,30 +12,47 @@ if (isset($_SESSION['login']) && isset($_SESSION['mdp'])){
     exit();
 }
 ?>
-
-
 <div class="container">
-    <h2 class="pc">Se connecter</h2>
+    <div class="screen">
 
-    <a action="client/tresorerie_client.php" method="post">
-    <ul>
-        <li>
-            <label for="login">Login: </label>
-            <input type="text" id="login" name="login" />
-        </li>
-        <li>
-            <label for="mdp">Mot de passe: </label>
-            <input type="password" id="mdp" name="mdp" />
-        </li>
-        <div class="button">
-            <button type="submit">Se connecter</button>
+        <div class="screen__content">
+            <h1 style="text-align: left;">Client</h1>
+
+            <form class="login" action="client/tresorerie_client.php">
+                <div class="login__field">
+                    <i class="login__icon fas fa-user"></i>
+                    <input type="text" class="login__input" placeholder="Identifiant" id="login" name="login">
+                </div>
+                <div class="login__field">
+                    <i class="login__icon fas fa-lock"></i>
+                    <input type="password" class="login__input" placeholder="Password" id="mdp" name="mdp">
+                    <span class="toggle-password" onclick="togglePassword()">👁</span>
+                </div>
+                <button class="button login__submit">
+                    <span class="button__text">Se connecter</span>
+                    <i class="button__icon fas fa-chevron-right"></i>
+                </button>
+            </form>
+
         </div>
-    </ul>
+        <div class="screen__background">
+            <span class="screen__background__shape screen__background__shape4"></span>
+            <span class="screen__background__shape screen__background__shape3"></span>
+            <span class="screen__background__shape screen__background__shape2"></span>
+            <span class="screen__background__shape screen__background__shape1"></span>
+
+        </div>
+        <button class="button login__submit" onclick="redirect1()">
         <a href="indexpo.php"> Connexion po</a>
-        <a href="indexamin.php" Connexion admin</a>
-</form>
+        </button>
+        <button class="button login__submit" onclick="redirect2()">
+        <a href="indexadmin.php"> Connexion admin</a>
+        </button>
+    </div>
 
 </div>
+
+
 
 
 <?php
@@ -72,4 +89,30 @@ if($_POST) {
     $results->closeCursor();
 }
 ?>
+
+<script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("mdp");
+        var toggleIcon = document.querySelector(".toggle-password");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.textContent = "👁️"; // Œil ouvert
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.textContent = "👁️"; // Œil fermé
+        }
+    }
+    function redirect1() {
+        // Remplacez 'nouvelle_page.html' par le chemin de la page vers laquelle vous souhaitez rediriger
+        window.location.href = 'indexpo.php';
+    }
+
+    function redirect2() {
+        // Remplacez 'nouvelle_page.html' par le chemin de la page vers laquelle vous souhaitez rediriger
+        window.location.href = 'indexadmin.php';
+    }
+
+</script>
+
 </html>

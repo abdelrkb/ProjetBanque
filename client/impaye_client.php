@@ -62,7 +62,6 @@ if (isset($_POST['submit'])) {
                 <th>N° Carte</th>
                 <th>Réseau</th>
                 <th>N° Dossier Impayé</th>
-                <th>Devise</th>
                 <th> Montant </th>
                 <th> Libellé Impayé</th>
             </thead>
@@ -77,8 +76,7 @@ if (isset($_POST['submit'])) {
                 <td>$ligne->NumCarte</td>
                 <td>$ligne->Reseau</td>
                 <td>$ligne->NumDossierImp</td>
-                <td> € </td>
-                <td>$ligne->MONTANT</td>
+                <td style='color:red;'>$ligne->MONTANT</td>
                 <td>$ligne->LibelleImp</td>
             </tr>";
         }

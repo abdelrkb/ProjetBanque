@@ -7,10 +7,7 @@
 ";
 
 $menuItems = array(
-    'Tresorerie' => 'tresorerie_client.php',
-    'Remise' => 'remise_client.php',
-    'Impaye' => 'impaye_client.php',
-    'Graphique' => 'graphique_client.php',
+    'Supression' => 'admin_acc.php',
     'Deconnexion' => 'compte.php'
 );
 

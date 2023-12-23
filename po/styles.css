@@ -1,9 +1,15 @@
-body {
-    font-family: Arial, sans-serif;
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
+
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: Raleway, sans-serif;
 }
 
+body {
+    background: linear-gradient(90deg, #C7C5F4, #776BCC);
+}
 .menu {
     background-color: #333;
     overflow: hidden;
@@ -53,19 +59,100 @@ body {
     color: white; /* Couleur pour les liens visités */
 }
 
-
-
+/* ---------------------- FORM ----------------------*/
 .box {
-    border: 1px solid #ccc; /* Bordure grise */
-    padding: 20px; /* Espacement intérieur de la boîte */
-    border-radius: 8px; /* Coins arrondis */
-    width: 300px; /* Largeur de la boîte */
-    margin: 20px auto; /* Centrage horizontal avec une marge autour de la boîte */
-    background-color: #f9f9f9; /* Couleur de fond */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    border: 1px solid #6865be; /* Border color */
+    padding: 20px;
+    border-radius: 8px;
+    width: 35%;
+    margin: 20px auto;
+    background-color: #ecf0f1; /* Background color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #7875B5; /* Header color */
+    text-align: center;
+}
+
+form {
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #7875B5; /* Submit button color */
+    color: #fff; /* Text color on the button */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #6563a1; /* Hover color for the submit button */
 }
 
 .box h1 {
     text-align: center; /* Centre le titre à l'intérieur de la boîte */
 
+}
+
+/* ---------------------- FORM ----------------------*/
+
+
+/* Ajoutez ces styles dans votre fichier styles.css */
+
+/* Style général des tableaux */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+/* Style des cellules d'en-tête */
+.custom-table thead th {
+    background-color: #f8f9fa;
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Style des lignes impaires du tableau */
+.custom-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Style des cellules du tableau */
+.custom-table tbody td {
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Style pour mettre en surbrillance les cellules de statut "payé" */
+.custom-table tbody td[data-statut='paye'] {
+    color: green;
+    font-weight: bold;
+}
+
+/* Style pour mettre en surbrillance les cellules de statut "impayé" */
+.custom-table tbody td[data-statut='impaye'] {
+    color: red;
+    font-weight: bold;
 }

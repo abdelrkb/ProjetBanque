@@ -25,63 +25,34 @@ require_once('confbdd.php');
 
 echo "
     <div class='box'>
-        <h1>Suppression avec accord PO</h1>
+        <h1>Accorder Suppression</h1>
         <center>
-            <form action='admin_acc.php' method='post'>";
-        $results = $dbh->query("SELECT SIREN FROM banque_clients");
+            <form action='Suppression_po.php' method='post'>";
+$results = $dbh->query("SELECT * FROM banque_validation");
 
 // Vérifier s'il y a des résultats
 if ($results->rowCount() > 0) {
     echo "SIREN <select id='siren' name='siren' required>";
     while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
-       $option = $ligne->SIREN;
-       echo "<option value='$option'> $option </option>";
+        $option = $ligne->SIREN;
+        echo "<option value='$option'> $option </option>";
     }
-            echo "</select>";
+    echo "</select>";
 }
-           echo"                 <input type='submit' value='Valider' name='submit1'>
+echo"                 <input type='submit' value='Valider' name='submit1'>
 
  
  </form>
         </center>
     </div>";
 
-
-echo "
-    <div class='box'>
-        <h1>Création compte utilisateur</h1>
-        <center>
-            <form action='admin_acc.php' method='post'>
-                <br>
-                <label for='siren'> Siren </label>
-                <input type='text' id='siren' name='siren' required>
-                <br>
-                <label for='raison'> Raison</label>
-                <input type='text' id='raison' name='raison' required>
-                <br>
-                <label for='login'> Login</label>
-                <input type='text' id='login' name='login' required>
-                 <br>  <br>
-                <input type='submit' value='Valider' name='submit2'>
-            </form>
-        </center>
-    </div>";
-
-if (isset($_POST['submit1'])){
+if (isset($_POST['submit1'])) {
     $siren = $_POST['siren'];
 
-    $results = $dbh->query("INSERT INTO banque_validation (SIREN) VALUES ('$siren')");
+    $results = $dbh->query("DELETE FROM banque_validation WHERE SIREN = '$siren'");
+    $results = $dbh->query("DELETE FROM banque_clients WHERE SIREN = '$siren'");
+
 
 }
 
-
-if (isset($_POST['submit2'])) {
-    $siren = $_POST['siren'];
-    $raison = $_POST['raison'];
-    $login = $_POST['login'];
-
-    // Ensure proper validation and sanitization of user inputs to prevent SQL injection
-    // Use prepared statements or parameterized queries for better security
-
-    $results = $dbh->query("INSERT INTO banque_clients (SIREN, Raison_sociale, Login, solde) VALUES ('$siren', '$raison', '$login', 0)");
-}
+?>

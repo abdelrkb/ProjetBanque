@@ -65,7 +65,6 @@ if (isset($_POST['submit'])) {
                 <th>N° De Remise</th>
                 <th>Date de traitement</th>
                 <th>Nbres transactions</th>
-                <th>Devise</th>
                 <th>Montant total</th>
                 <th>Sens</th>
             </thead>
@@ -74,6 +73,7 @@ if (isset($_POST['submit'])) {
         while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
             // Calcul du sens
             $sens = ($ligne->MontantTotal < 0) ? '-' : '+';
+            $color = ($ligne->MontantTotal < 0) ? 'red' : 'green';
 
             echo "
             <tr>
@@ -82,8 +82,7 @@ if (isset($_POST['submit'])) {
                 <td>$ligne->NumRemise</td>
                 <td>$ligne->DateTraitement</td>
                 <td>$ligne->NbreTransactions</td>
-                <td>€</td>
-                <td>$ligne->MontantTotal</td>
+                <td style='color:$color;'>$ligne->MontantTotal</td>
                 <td>$sens</td>
             </tr>";
         }

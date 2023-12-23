@@ -33,10 +33,6 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['mdp'])) {
         } else {
             echo "Connexion échouée";
         }
-    } else {
-        // Rediriger vers la page de connexion si aucune session ni données de formulaire
-        header('Location: indexpo.php');
-        exit();
     }
 }
 ?>
@@ -51,9 +47,8 @@ echo "
 <div class='box'>
     <h1>Annonce de trésorerie par date</h1>
     <center>
-        <form action='tresorerie_po.php' method='post'>
-            <label for='siren'> SIREN </label>
-
+        <form action='tresorerie_po.php' method='post'>";
+echo"
             <br>
             <label for='date'> Date de transaction</label>
             <input type='date' id='date' name='date' required>
@@ -95,7 +90,7 @@ echo "
         </form>
     </center>
 </div>";
-
+/*
 // -------------------
 // 3 Recherche par Siren et raison sociale
 // -------------------
@@ -128,7 +123,7 @@ echo "
         </form>
     </center>
 </div>";
-
+*/
 //Tableau Trésorerie
 if (isset($_POST['search1'])) {
     echo "<h1> Tableau des annonces</h1>";
@@ -137,22 +132,26 @@ if (isset($_POST['search1'])) {
     FROM banque_clients c, banque_transaction
     WHERE DATE_VENTE = '$date'");
     echo"
-    <table class='table table-striped' style='width:100%'>
+    <table class='custom-table' style='width:100%'>
     <thead> 
         <th> N° Siren</th>
         <th> Raison Sociale</th>
         <th> Nombres Transactions</th>
-        <th> Devise (EUR)</th>
         <th> Montant total</th>
     </thead> <tbody> <tr>";
-
     while ($ligne = $results1->fetch(PDO::FETCH_OBJ)) {
+
      echo"<td> / </td>
      <td> / </td>
-     <td> $ligne->nb </td>
-     <td> '€' </td>
-     <td> $ligne->montantTotal </td>
-     ";
+     <td> $ligne->nb </td>";
+     if ($ligne->montantTotal < 0){
+         $color = 'red';
+         echo"   <td style='color:$color;'> $ligne->montantTotal </td>";
+    }
+     else{
+         $color = 'green';
+         echo"   <td> $ligne->montantTotal </td>";
+     }
     }
     echo" </tr> </tbody></table>";
 
@@ -160,7 +159,7 @@ if (isset($_POST['search1'])) {
     echo "<h1> Détail de trésorerie </h1>";
     $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date'");
     echo "
-    <table id='example' class='table table-striped' style='width:100%'>
+    <table id='example' class='table table-striped custom-table' style='width:100%'>
     <thead>
     <tr>
         <th> N° de Siren </th>
@@ -181,15 +180,17 @@ if (isset($_POST['search1'])) {
            $stat = $ligne -> Statut;
            if ($stat == 1) {
             $statut = 'payé';
+            $color = 'green';
            }
            else{
             $statut = 'impayé';
+            $color = 'red';
            }
            echo"
            <td> $siren </td>
            <td> $rs </td>
-           <td> $montant </td>
-           <td> $statut </td>
+           <td style='color:$color;'> $montant </td>
+           <td style='color:$color;'> $statut </td>
            <td> $date </td>
            </tr>";
         }
@@ -273,7 +274,6 @@ if (isset ($_POST['search2'])){
         <th> N° Siren</th>
         <th> Raison Sociale</th>
         <th> Nombres Transactions</th>
-        <th> Devise (EUR)</th>
         <th> Montant total</th>
     </thead> <tbody> <tr>";
 
@@ -281,10 +281,17 @@ if (isset ($_POST['search2'])){
         $raison = $ligne->Raison_sociale;
      echo"<td> $siren </td>
      <td> $ligne->Raison_sociale </td>
-     <td> $ligne->nb </td>
-     <td> '€' </td>
-     <td> $ligne->montantTotal </td>
-     ";
+     <td> $ligne->nb </td>";
+          if ($ligne->montantTotal < 0){
+         $color = 'red';
+         echo"   <td style='color:$color;'> $ligne->montantTotal </td>";
+    }
+     else{
+         $color = 'green';
+         echo"   <td style='color:$color;'> $ligne->montantTotal </td>";
+     }
+
+
     }
 
     $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date' AND c.SIREN = '$siren'");
@@ -304,16 +311,19 @@ if (isset ($_POST['search2'])){
     while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
         if ($ligne->Statut == 1) {
             $statut = 'payé';
+            $color = 'green';
         }
         else{
             $statut = 'impayé';
+            $color = 'red';
+
         }
         echo"
         <tr>
         <td> $siren </td>
         <td> $ligne->Raison_sociale</td>
-        <td> $ligne->Montant</td>
-        <td> $statut</td>
+        <td style='color:$color;'> $ligne->Montant</td>
+        <td style='color:$color;'> $statut</td>
         <td> $date </td>
         </tr>
      ";
@@ -373,6 +383,7 @@ document.getElementById('pdf').addEventListener('click', function() {
 
 
 //RECHERCHE PAR RAISON SOCIALE
+/*
 if (isset ($_POST['search3'])){
     $raison = $_POST['raison'];
     $date= $_POST['date'];
@@ -382,10 +393,9 @@ if (isset ($_POST['search3'])){
     $results1 = $dbh -> query("
 SELECT COUNT(*) AS nb, SUM(Montant) AS montantTotal, c.SIREN, c.Raison_sociale
 FROM banque_clients c
-JOIN banque_transaction ON c.SIREN = banque_transaction.SIREN
-WHERE DATE_VENTE = '$date' AND c.Raison_sociale = '$raison'
+JOIN banque_transaction bt ON c.SIREN = bt.SIREN
+WHERE bt.DATE_VENTE = '$date' AND c.Raison_sociale LIKE '%$raison%'
 GROUP BY c.SIREN, c.Raison_sociale;
-
 ");
     echo"
     <table class='table table-striped' style='width:100%'>
@@ -393,7 +403,6 @@ GROUP BY c.SIREN, c.Raison_sociale;
         <th> N° Siren</th>
         <th> Raison Sociale</th>
         <th> Nombres Transactions</th>
-        <th> Devise (EUR)</th>
         <th> Montant total</th>
     </thead> <tbody> <tr>";
 
@@ -401,9 +410,9 @@ GROUP BY c.SIREN, c.Raison_sociale;
         echo"<td> $ligne->SIREN </td>
      <td>  $raison</td>
      <td> $ligne->nb </td>
-     <td> '€' </td>
-     <td> $ligne->montantTotal </td>
-     ";
+
+     <td> $ligne->montantTotal </td>";
+
     }
     echo "</tr> </tbody></table>";
     $results = $dbh -> query("SELECT c.SIREN, Raison_sociale, Montant, Statut, DATE_VENTE FROM banque_clients c, banque_transaction WHERE DATE_VENTE = '$date' AND c.Raison_sociale = '$raison'");
@@ -491,6 +500,6 @@ document.getElementById('pdf').addEventListener('click', function() {
 </div>
 ";
 
-}
+}*/
 
 ?>

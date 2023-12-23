@@ -19,17 +19,16 @@ if (isset($_SESSION['login']) && isset($_SESSION['mdp'])){
 ?>
 
 
+
 <div class="container">
     <div class="screen">
 
         <div class="screen__content">
-            <h1 style="text-align: left;">PO</h1>
+            <h1 style="text-align: left;">Admin</h1>
 
-            <form class="login" action="po/tresorerie_po.php">
-
+            <form class="login" action="adm/admin_acc.php">
                 <div class="login__field">
                     <i class="login__icon fas fa-user"></i>
-
                     <input type="text" class="login__input" placeholder="Identifiant" id="login" name="login">
                 </div>
                 <div class="login__field">
@@ -55,8 +54,10 @@ if (isset($_SESSION['login']) && isset($_SESSION['mdp'])){
             <a href="index.php"> Retour </a>
         </button>
     </div>
+
 </div>
 
+</div>
 
 <script>
     function togglePassword() {
