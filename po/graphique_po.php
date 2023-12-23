@@ -50,30 +50,42 @@ if (isset($_POST['submit'])) {
             SELECT DATE_VENTE, SUM(MONTANT) AS MontantTotal
             FROM banque_transaction 
             WHERE STATUT = 0 AND DATE_VENTE > '$dated' AND DATE_VENTE < '$datef'
-            GROUP BY DATE_VENTE
+            GROUP BY DATE_VENTE;
+        ");
+
+        $result1 = $dbh->query("
+            SELECT LibelleImp, SUM(MONTANT) AS MontantTotal
+            FROM banque_transaction 
+            WHERE STATUT = 0 AND DATE_VENTE > '$dated' AND DATE_VENTE < '$datef'
+            GROUP BY LibelleImp;
         ");
         echo "
 
             <canvas id='myChart' width='400' height='200'></canvas>
             <canvas id='myPieChart' width='400' height='200'></canvas>
-            <button id='exportPNG'>Export PNG</button>
             <button id='exportPDF'>Export PDF</button>
 
         ";
     }
 }
 ?>
-
 <script>
     $(document).ready(function () {
         // Récupérer les données depuis PHP
         var dates = [];
         var montants = [];
+        var libelle = [];
 
         <?php
         while ($ligne = $results->fetch(PDO::FETCH_OBJ)) {
             echo "dates.push('{$ligne->DATE_VENTE}');";
             echo "montants.push('{$ligne->MontantTotal}');";
+            // Il semble que vous ayez omis de récupérer les libellés dans cette boucle
+        }
+
+        while ($ligne = $result1->fetch(PDO::FETCH_OBJ)) {
+            echo "libelle.push('{$ligne->LibelleImp}');";
+            // Ajoutez la récupération des montants ici si nécessaire
         }
         ?>
 
@@ -105,7 +117,7 @@ if (isset($_POST['submit'])) {
         var myPieChart = new Chart(pieCtx, {
             type: 'pie',
             data: {
-                labels: dates,
+                labels: libelle,
                 datasets: [{
                     data: montants,
                     backgroundColor: [
@@ -127,17 +139,6 @@ if (isset($_POST['submit'])) {
                     borderWidth: 1
                 }]
             }
-        });
-
-        $('#exportPNG').click(function () {
-            html2canvas(document.getElementById('myChart')).then(function (canvas) {
-                var imgData = canvas.toDataURL('image/png');
-                var img = new Image();
-                img.src = imgData;
-                var pdf = new jsPDF('p', 'mm', 'a4');
-                pdf.addImage(img, 'PNG', 10, 10, 190, 100);
-                pdf.save('chart.png');
-            });
         });
 
         // Exporter en PDF

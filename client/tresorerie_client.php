@@ -24,24 +24,30 @@ ini_set('display_errors', 1);
 session_start(); // Start the session at the beginning
 
 include 'menu.php';
-require_once('confbdd.php') ;
+require_once('confbdd.php');
 
-if (isset($_POST['login'])) {
-    $login = $_POST['login'];
-
-    $_SESSION['siren'] = $login;
-    setcookie('siren_cookie', $login, time() + (86400 * 30), "/"); // 86400 = 1 day
+// Vérification de la session
+if (isset($_SESSION['siren'])) {
+    $siren = $_SESSION['siren'];
+} elseif (isset($_COOKIE['siren_cookie'])) {
+    $siren = $_COOKIE['siren_cookie'];
+    $_SESSION['siren'] = $siren; // Stocker dans la session pour persistencer
+} elseif (isset($_POST['login'])) {
+    $siren = $_POST['login'];
+    $_SESSION['siren'] = $siren;
+    setcookie('siren_cookie', $siren, time() + (86400 * 30), "/", "", true, true); // Sécurisation du cookie
 }
-
 session_regenerate_id(true);
 echo "
 <div class='box'>";
-$siren = $_COOKIE['siren_cookie'];
-$results1 = $dbh -> query("SELECT SOLDE from banque_clients WHERE SIREN='$siren';");
+
+$results1 = $dbh -> query("SELECT SOLDE, Raison_sociale from banque_clients WHERE SIREN='$siren'");
 while ($ligne = $results1->fetch(PDO::FETCH_OBJ)){
     echo "<h1> Solde Global</h1>";
+    echo "<center> $ligne->Raison_sociale</center>";
     echo "<center> $ligne->SOLDE €</center>";
 }
+
 
 echo"
 </div>

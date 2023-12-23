@@ -18,7 +18,7 @@ if (isset($_SESSION['login']) && isset($_SESSION['mdp'])){
         <div class="screen__content">
             <h1 style="text-align: left;">Client</h1>
 
-            <form class="login" action="client/tresorerie_client.php">
+            <form class="login" action="client/tresorerie_client.php" method="post">
                 <div class="login__field">
                     <i class="login__icon fas fa-user"></i>
                     <input type="text" class="login__input" placeholder="Identifiant" id="login" name="login">
