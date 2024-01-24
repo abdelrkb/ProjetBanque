@@ -157,11 +157,11 @@ if (isset($_POST['submit'])) {
 
 
         $('#exportPDF2').click(function () {
-            html2canvas(document.getElementById('myChart')).then(function (canvas) {
+            html2canvas(document.getElementById('myPieChart')).then(function (canvas) {
                 var imgData = canvas.toDataURL('image/png');
                 var pdf = new jsPDF('p', 'mm', 'a4');
                 pdf.addImage(imgData, 'PNG', 10, 10, 190, 100);
-                pdf.save('chart.pdf');
+                pdf.save('piechart.pdf');
             });
         });
     });

@@ -62,8 +62,10 @@ if (isset($_POST['submit'])) {
         echo "
 
             <canvas id='myChart' width='400' height='200'></canvas>
-            <canvas id='myPieChart' width='400' height='200'></canvas>
             <button id='exportPDF'>Export PDF</button>
+
+            <canvas id='myPieChart' width='400' height='200'></canvas>
+            <button id='exportPDF2'>Export PDF</button>
 
         ";
     }
@@ -150,5 +152,16 @@ if (isset($_POST['submit'])) {
                 pdf.save('chart.pdf');
             });
         });
+
+
+        $('#exportPDF2').click(function () {
+            html2canvas(document.getElementById('myPieChart')).then(function (canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var pdf = new jsPDF('p', 'mm', 'a4');
+                pdf.addImage(imgData, 'PNG', 10, 10, 190, 100);
+                pdf.save('piechart.pdf');
+            });
+        });
+
     });
 </script>
